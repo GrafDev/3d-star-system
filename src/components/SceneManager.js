@@ -4,7 +4,8 @@ import { systemConfig } from '../config/systemConfig';
 import { Star } from '../objects/Star';
 import { Planet } from '../objects/Planet';
 import { AsteroidBelt } from '../objects/AsteroidBelt';
-import { Comet } from '../objects/Comet';
+// Удаляем импорт класса Comet
+// import { Comet } from '../objects/Comet';
 import { StarBackground } from '../effects/StarBackground';
 
 export class SceneManager {
@@ -47,10 +48,21 @@ export class SceneManager {
 
         console.log("SceneManager: Камера установлена:", this.camera.position);
 
-        // Добавление основного освещения
-        const ambientLight = new THREE.AmbientLight(0x333333);
+        // Улучшенное освещение сцены
+
+        // Увеличиваем яркость рассеянного освещения
+        const ambientLight = new THREE.AmbientLight(0x555555); // Увеличено с 0x333333
         this.scene.add(ambientLight);
-        console.log("SceneManager: Добавлен свет:", ambientLight);
+
+        // Добавляем полусферическое освещение для более естественных переходов
+        const hemisphereLight = new THREE.HemisphereLight(
+            0xffffbb, // небесный цвет
+            0x080820, // земной цвет
+            0.5       // интенсивность
+        );
+        this.scene.add(hemisphereLight);
+
+        console.log("SceneManager: Добавлено улучшенное освещение");
 
         // Черный фон
         this.scene.background = new THREE.Color(0x000000);
@@ -135,12 +147,7 @@ export class SceneManager {
         this.scene.add(asteroidBelt.group);
         this.celestialObjects.push(asteroidBelt);
 
-        // Создание комет
-        systemConfig.comets.forEach(cometConfig => {
-            const comet = new Comet(cometConfig);
-            this.scene.add(comet.mesh);
-            this.celestialObjects.push(comet);
-        });
+        // Кометы удалены
 
         console.log("SceneManager.createCelestialObjects: Создано объектов:", this.celestialObjects.length);
     }

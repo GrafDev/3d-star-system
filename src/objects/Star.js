@@ -43,8 +43,12 @@ export class Star extends CelestialObject {
         this.mesh = new THREE.Mesh(this.geometry, this.material);
         this.mesh.position.copy(this.position);
 
-        // Добавляем источник света
-        this.light = new THREE.PointLight(config.color || 0xffffff, config.intensity || 1, 100);
+        // Добавляем источник света с настройками из конфигурации
+        const lightDistance = config.lightDistance || 10000;
+        const lightDecay = config.hasOwnProperty('lightDecay') ? config.lightDecay : 1; // Значение 0 означает, что свет не угасает с расстоянием
+
+        this.light = new THREE.PointLight(config.color || 0xffffff, config.intensity || 1, lightDistance);
+        this.light.decay = lightDecay;
         this.light.position.copy(this.position);
         this.mesh.add(this.light);
 
