@@ -7,14 +7,43 @@ export class Planet extends CelestialObject {
 
         this.name = config.name || 'Planet';
 
-        // Создаем геометрию и материал для планеты
+        // Создаем геометрию для планеты
         this.geometry = new THREE.SphereGeometry(this.radius, 32, 32);
-        this.material = new THREE.MeshStandardMaterial({
-            color: config.color || 0xaaaaaa,
-            roughness: 0.7,
-            metalness: 0.1
-        });
 
+        // Загружаем текстуру, если она указана в конфигурации
+        const textureLoader = new THREE.TextureLoader();
+        let material;
+
+        if (config.textureUrl) {
+            // Изменяем путь к текстуре, добавляя правильный префикс
+            const textureUrl = './src/assets' + config.textureUrl;
+
+            const texture = textureLoader.load(
+                textureUrl,
+                function(loadedTexture) {
+                    console.log('Texture loaded successfully for ' + config.name + ':', textureUrl);
+                },
+                undefined,
+                function(error) {
+                    console.error('Error loading texture for ' + config.name + ':', textureUrl, error);
+                }
+            );
+
+            material = new THREE.MeshStandardMaterial({
+                map: texture,
+                roughness: 0.7,
+                metalness: 0.1
+            });
+        } else {
+            // Если текстуры нет, используем цвет
+            material = new THREE.MeshStandardMaterial({
+                color: config.color || 0xaaaaaa,
+                roughness: 0.7,
+                metalness: 0.1
+            });
+        }
+
+        this.material = material;
         this.mesh = new THREE.Mesh(this.geometry, this.material);
         this.mesh.position.copy(this.position);
 
@@ -48,5 +77,8 @@ export class Planet extends CelestialObject {
 
         // Обновляем положение меша
         this.mesh.position.copy(this.position);
+
+        // Добавляем вращение планеты вокруг своей оси
+        this.mesh.rotation.y += 0.005; // Можно настроить скорость вращения
     }
 }

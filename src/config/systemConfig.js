@@ -8,7 +8,8 @@ export const systemConfig = {
         velocity: { x: 0, y: 0, z: 0 },
         color: 0xffdd00,
         emissiveColor: 0xffaa00,
-        intensity: 2000
+        intensity: 200,
+        textureUrl: '/textures/sun.png'
     },
 
     // Параметры планет Star Wars
@@ -117,5 +118,50 @@ export const systemConfig = {
             tailLength: 15,
             tailColor: 0xaaffff
         }
-    ]
+    ],
+
+    // Параметры звездного неба
+    starBackground: {
+        // Базовые настройки
+        starsCount: 10000,                // Количество звезд
+        radius: 4000,                     // Радиус сферы со звездами
+        minSize: 0.1,                     // Минимальный размер звезды
+        maxSize: 10.0,                     // Максимальный размер звезды
+        baseMaterialSize: 12.0,            // Базовый размер материала для точек
+        renderOrder: 100,                 // Приоритет рендеринга
+
+        // Настройки мерцания
+        flickeringStarsPercent: 0.1,      // Процент мерцающих звезд
+        flickeringSpeed: 0.1,             // Скорость мерцания
+        flickerMinFactor: 0.1,            // Минимальный фактор мерцания
+        flickerMaxFactor: 1.0,            // Максимальный фактор мерцания
+
+        // Настройки цветов звезд в процентах (в сумме должно быть 1.0 или 100%)
+        whiteStarsPercent: 0.7,           // Процент белых звезд
+        blueStarsPercent: 0.1,            // Процент голубых звезд
+        redStarsPercent: 0.1,             // Процент красных звезд
+        yellowStarsPercent: 0.1,          // Процент желтых звезд
+
+        // Настройки цветов (RGB компоненты)
+        whiteStarsColor: {
+            r: [0.9, 1.0],                // Диапазон значений для R
+            g: [0.9, 1.0],                // Диапазон значений для G
+            b: [0.9, 1.0]                 // Диапазон значений для B
+        },
+        blueStarsColor: {
+            r: [0.8, 1.0],
+            g: [0.9, 1.0],
+            b: [1.0, 1.0]
+        },
+        redStarsColor: {
+            r: [1.0, 1.0],
+            g: [0.7, 1.0],
+            b: [0.7, 1.0]
+        },
+        yellowStarsColor: {
+            r: [1.0, 1.0],
+            g: [1.0, 1.0],
+            b: [0.7, 1.0]
+        }
+    }
 };

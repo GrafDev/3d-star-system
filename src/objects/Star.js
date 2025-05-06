@@ -5,13 +5,40 @@ export class Star extends CelestialObject {
     constructor(config) {
         super(config);
 
-        // Создаем геометрию и материал для звезды
+        // Загружаем текстуру звезды
+        const textureLoader = new THREE.TextureLoader();
+        let material;
+
+        if (config.textureUrl) {
+            // Изменяем путь к текстуре, добавляя правильный префикс
+            const textureUrl = './src/assets' + config.textureUrl;
+
+            const texture = textureLoader.load(
+                textureUrl,
+                function(loadedTexture) {
+                    console.log('Texture loaded successfully:', textureUrl);
+                },
+                undefined,
+                function(error) {
+                    console.error('Error loading texture:', textureUrl, error);
+                }
+            );
+
+            // Используем MeshBasicMaterial, который не требует освещения
+            material = new THREE.MeshBasicMaterial({
+                map: texture,
+                color: 0xffdd00
+            });
+        } else {
+            // Запасной вариант, если текстура не указана
+            material = new THREE.MeshBasicMaterial({
+                color: config.color || 0xffdd00
+            });
+        }
+
+        // Создаем геометрию и устанавливаем материал для звезды
         this.geometry = new THREE.SphereGeometry(this.radius, 32, 32);
-        this.material = new THREE.MeshBasicMaterial({
-            color: config.color || 0xffdd00,
-            emissive: config.emissiveColor || 0xffaa00,
-            emissiveIntensity: config.intensity || 1
-        });
+        this.material = material;
 
         this.mesh = new THREE.Mesh(this.geometry, this.material);
         this.mesh.position.copy(this.position);
@@ -20,10 +47,17 @@ export class Star extends CelestialObject {
         this.light = new THREE.PointLight(config.color || 0xffffff, config.intensity || 1, 100);
         this.light.position.copy(this.position);
         this.mesh.add(this.light);
+
+        // Добавляем еще один источник света для лучшего освещения сцены
+        const ambientLight = new THREE.AmbientLight(0x333333);
+        this.mesh.add(ambientLight);
     }
 
     update(deltaTime, celestialObjects) {
         // У звезды нет особой логики обновления, она статична
         super.update(deltaTime, celestialObjects);
+
+        // Добавляем медленное вращение для звезды
+        this.mesh.rotation.y += 0.001;
     }
 }
