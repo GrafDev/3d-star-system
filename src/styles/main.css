@@ -1,4 +1,4 @@
-/* Базовые стили для всей страницы */
+
 * {
   margin: 0;
   padding: 0;
@@ -21,7 +21,7 @@
 html, body {
   width: 100%;
   height: 100%;
-  overflow: hidden; /* Предотвращает появление полос прокрутки */
+  overflow: hidden;
 }
 
 body {
@@ -39,7 +39,7 @@ a:hover {
   color: #535bf2;
 }
 
-/* Стили для основного контейнера приложения */
+
 #app {
   width: 100vw;
   height: 100vh;
@@ -47,7 +47,7 @@ a:hover {
   position: relative;
 }
 
-/* Стили для canvas Three.js */
+
 canvas {
   display: block;
   width: 100%;
@@ -57,17 +57,17 @@ canvas {
   left: 0;
 }
 
-/* UI элементы */
+
 .ui-container {
   position: absolute;
   top: 10px;
   left: 10px;
   z-index: 10;
-  pointer-events: none; /* Позволяет кликать "сквозь" UI на canvas */
+  pointer-events: none;
 }
 
 .ui-container > * {
-  pointer-events: auto; /* Возвращает обработку событий для дочерних элементов */
+  pointer-events: auto;
 }
 
 h1 {
@@ -76,7 +76,6 @@ h1 {
   margin-bottom: 0.5em;
 }
 
-/* Стили для кнопок и интерактивных элементов */
 button {
   border-radius: 8px;
   border: 1px solid transparent;
@@ -104,7 +103,6 @@ button:focus-visible {
 
 }
 
-/* Стили для светлой темы (если используется) */
 @media (prefers-color-scheme: light) {
   :root {
     color: #213547;

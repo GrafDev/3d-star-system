@@ -20,7 +20,7 @@ export const systemConfig = {
         intensity: 10,
         lightDistance: 5000,
         lightDecay: 0,
-        textureUrl: '/textures/sun.png',
+        textureUrl: '/textures/sun.webp',
         bloom: true
     },
 
@@ -34,7 +34,7 @@ export const systemConfig = {
                 distance: 12,
                 velocity: 1.8,
                 color: 0xd6c292,
-                textureUrl: '/textures/tatooine.png'
+                textureUrl: '/textures/tatooine.webp'
             },
             {
                 name: "Корусант",
@@ -43,7 +43,7 @@ export const systemConfig = {
                 distance: 18,
                 velocity: 1.6,
                 color: 0x4e7fbb,
-                textureUrl: '/textures/coruscant.png'
+                textureUrl: '/textures/coruscant.webp'
             },
             {
                 name: "Набу",
@@ -52,7 +52,7 @@ export const systemConfig = {
                 distance: 24,
                 velocity: 1.4,
                 color: 0x3d995e,
-                textureUrl: '/textures/naboo.png'
+                textureUrl: '/textures/naboo.webp'
             },
             {
                 name: "Хот",
@@ -61,7 +61,7 @@ export const systemConfig = {
                 distance: 30,
                 velocity: 1.2,
                 color: 0xeeeeff,
-                textureUrl: '/textures/hoth.png'
+                textureUrl: '/textures/hoth.webp'
             },
             {
                 name: "Дагоба",
@@ -70,7 +70,7 @@ export const systemConfig = {
                 distance: 36,
                 velocity: 1.1,
                 color: 0x4a633d,
-                textureUrl: '/textures/dagobah.png'
+                textureUrl: '/textures/dagobah.webp'
             },
             {
                 name: "Мустафар",
@@ -79,7 +79,7 @@ export const systemConfig = {
                 distance: 44,
                 velocity: 0.9,
                 color: 0xc13e0e,
-                textureUrl: '/textures/mustafar.png'
+                textureUrl: '/textures/mustafar.webp'
             },
             {
                 name: "Кашиик",
@@ -88,7 +88,7 @@ export const systemConfig = {
                 distance: 52,
                 velocity: 0.8,
                 color: 0x2d7d46,
-                textureUrl: '/textures/kashyyyk.png'
+                textureUrl: '/textures/kashyyyk.webp'
             },
             {
                 name: "Камино",
@@ -97,7 +97,7 @@ export const systemConfig = {
                 distance: 60,
                 velocity: 0.7,
                 color: 0x1a3a59,
-                textureUrl: '/textures/kamino.png'
+                textureUrl: '/textures/kamino.webp'
             }
         ];
 

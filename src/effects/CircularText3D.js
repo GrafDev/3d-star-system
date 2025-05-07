@@ -1,6 +1,8 @@
 import * as THREE from 'three';
-import { FontLoader } from 'three/examples/jsm/loaders/FontLoader.js';
+import { Font } from 'three/examples/jsm/loaders/FontLoader.js';
 import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry.js';
+// Импортируем встроенный шрифт
+import { helvetikerFont } from '../assets/fonts/helvetiker_bold.js';
 
 export class CircularText3D {
     constructor(text, radius, scene) {
@@ -9,19 +11,17 @@ export class CircularText3D {
         this.scene = scene;
         this.group = new THREE.Group();
         this.characters = [];
-        this.isLoaded = false;
 
-        const fontLoader = new FontLoader();
-        fontLoader.load('/node_modules/three/examples/fonts/helvetiker_bold.typeface.json', (font) => {
-            this.font = font;
-            this.isLoaded = true;
-            this.createText();
-        });
+        // Создаем шрифт из встроенных данных
+        this.font = new Font(helvetikerFont);
+        this.createText();
+
+        // Добавляем группу на сцену
+        this.scene.add(this.group);
     }
 
     createText() {
-        if (!this.isLoaded) return;
-
+        // Очищаем предыдущие объекты
         this.characters.forEach(char => {
             this.group.remove(char);
             if (char.geometry) char.geometry.dispose();
@@ -38,13 +38,10 @@ export class CircularText3D {
         };
 
         const textMaterial = new THREE.MeshBasicMaterial({
-            color: 0xffffff,  // Белый цвет
-            emissive: 0xffffff, // Свечение тоже белое
-            emissiveIntensity: 1.0 // Максимальная интенсивность свечения
+            color: 0xffffff,
+            emissive: 0xffffff,
+            emissiveIntensity: 1.0
         });
-
-        textMaterial.castShadow = false;
-        textMaterial.receiveShadow = false;
 
         const characters = this.text.split('');
         const angleStep = (2 * Math.PI) / characters.length;
@@ -61,9 +58,6 @@ export class CircularText3D {
 
             const textMesh = new THREE.Mesh(textGeo, textMaterial);
 
-            textMesh.castShadow = false;
-            textMesh.receiveShadow = false;
-
             const angle = index * angleStep;
 
             const x = this.radius * Math.sin(angle);
@@ -74,12 +68,9 @@ export class CircularText3D {
             textMesh.lookAt(0, 0, 0);
             textMesh.rotateY(Math.PI);
 
-
             this.group.add(textMesh);
             this.characters.push(textMesh);
         });
-
-        this.scene.add(this.group);
     }
 
     updateRadius(newRadius) {

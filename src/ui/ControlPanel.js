@@ -13,6 +13,9 @@ export class ControlPanel {
 
         this.container = null;
         this.createUI();
+
+        // Добавляем обработчик изменения размера окна
+        window.addEventListener('resize', () => this.handleResize());
     }
 
     createUI() {
@@ -38,6 +41,13 @@ export class ControlPanel {
         const content = document.createElement('div');
         content.className = 'control-panel-content';
         this.container.appendChild(content);
+
+        // Проверяем, мобильное ли устройство (ширина экрана меньше 768px)
+        if (window.innerWidth < 768) {
+            // На мобильных - сворачиваем панель по умолчанию
+            content.style.display = 'none';
+            toggleButton.textContent = '+';
+        }
 
         this.addSlider(
             content,
@@ -137,6 +147,18 @@ export class ControlPanel {
 
         const toggleButton = this.container.querySelector('.toggle-button');
         toggleButton.textContent = isVisible ? '+' : '−';
+    }
+
+    // Метод для обработки изменения размера окна
+    handleResize() {
+        const content = this.container.querySelector('.control-panel-content');
+        const toggleButton = this.container.querySelector('.toggle-button');
+
+        // Если ширина экрана стала меньше 768px, сворачиваем панель
+        if (window.innerWidth < 768 && content.style.display !== 'none') {
+            content.style.display = 'none';
+            toggleButton.textContent = '+';
+        }
     }
 
     updateSimulationSpeed(value) {
@@ -271,6 +293,27 @@ export class ControlPanel {
                 pointer-events: none;
                 white-space: nowrap;
                 text-shadow: 0 0 3px rgba(0, 0, 0, 0.8);
+            }
+            
+            /* Добавляем медиа-запрос для мобильных устройств */
+            @media screen and (max-width: 767px) {
+                .control-panel {
+                    width: 250px;
+                    top: 10px;
+                    right: 10px;
+                }
+                
+                .control-panel-header {
+                    padding: 8px 12px;
+                }
+                
+                .slider-container label {
+                    font-size: 14px;
+                }
+                
+                .checkbox-container label {
+                    font-size: 14px;
+                }
             }
         `;
         document.head.appendChild(style);

@@ -9,7 +9,7 @@ export class Star extends CelestialObject {
         let material;
 
         if (config.textureUrl) {
-            const textureUrl = './src/assets' + config.textureUrl;
+            const textureUrl = '/assets' + config.textureUrl;
 
             const texture = textureLoader.load(
                 textureUrl,
