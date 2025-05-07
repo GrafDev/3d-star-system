@@ -94,31 +94,23 @@ export class StarBackground {
             positions[i * 3 + 1] = y;
             positions[i * 3 + 2] = z;
 
-            // Случайный размер для каждой звезды
             const size = this.minSize + Math.random() * (this.maxSize - this.minSize);
             sizes[i] = size;
             this.originalSizes[i] = size; // Сохраняем оригинальный размер
 
-            // Определяем цвет звезды на основе процентных соотношений
             const colorRand = Math.random();
             let colorRange = null;
 
-            // Определяем, к какой категории относится звезда
             if (colorRand < this.whiteStarsPercent) {
-                // Белые звезды
                 colorRange = this.whiteStarsColor;
             } else if (colorRand < this.whiteStarsPercent + this.blueStarsPercent) {
-                // Голубые звезды
                 colorRange = this.blueStarsColor;
             } else if (colorRand < this.whiteStarsPercent + this.blueStarsPercent + this.redStarsPercent) {
-                // Красные звезды
                 colorRange = this.redStarsColor;
             } else {
-                // Желтые звезды
                 colorRange = this.yellowStarsColor;
             }
 
-            // Устанавливаем цвет на основе выбранного диапазона
             const r = this.getRandomInRange(colorRange.r);
             const g = this.getRandomInRange(colorRange.g);
             const b = this.getRandomInRange(colorRange.b);
@@ -127,12 +119,10 @@ export class StarBackground {
             colors[i * 3 + 1] = g; // G
             colors[i * 3 + 2] = b; // B
 
-            // Сохраняем оригинальные цвета
             this.originalColors[i * 3] = r;
             this.originalColors[i * 3 + 1] = g;
             this.originalColors[i * 3 + 2] = b;
 
-            // Определяем мерцающие звезды
             if (Math.random() < this.flickeringStarsPercent) {
                 this.flickeringStars.push({
                     index: i,
@@ -144,12 +134,10 @@ export class StarBackground {
 
         console.log(`StarBackground: Сгенерировано ${this.flickeringStars.length} мерцающих звезд`);
 
-        // Добавляем атрибуты в геометрию
         geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
         geometry.setAttribute('size', new THREE.BufferAttribute(sizes, 1));
         geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
 
-        // Создаем материал для точек с параметрами из конфигурации
         const material = new THREE.PointsMaterial({
             color: 0xffffff,
             size: this.baseMaterialSize,
@@ -163,13 +151,10 @@ export class StarBackground {
 
         console.log("StarBackground: Создание системы частиц (Points)...");
 
-        // Создаем и сохраняем систему частиц
         this.points = new THREE.Points(geometry, material);
 
-        // Устанавливаем приоритет рендеринга
         this.points.renderOrder = this.renderOrder;
 
-        // Сохраняем ссылки на атрибуты для анимации
         this.sizesAttribute = geometry.attributes.size;
         this.colorsAttribute = geometry.attributes.color;
 
@@ -177,33 +162,24 @@ export class StarBackground {
     }
 
     update(deltaTime) {
-        // Проверяем наличие мерцающих звезд
         if (this.flickeringStars.length === 0) return;
 
-        // Обновляем мерцающие звезды
         for (const star of this.flickeringStars) {
             const index = star.index;
 
-            // Простой тайминг для мерцания - просто проверяем время
             const currentTime = performance.now() * 0.001;
 
-            // Используем простую логику: если время с определенной фазой больше некоторого порога - звезда видима,
-            // в противном случае - менее видима
             const isVisible = Math.sin(currentTime * star.speed + star.phase) > 0;
 
-            // Фактор видимости - либо максимальный, либо минимальный
             const flickerFactor = isVisible ? this.flickerMaxFactor : this.flickerMinFactor;
 
-            // Обновляем размер звезды
             this.sizesAttribute.array[index] = this.originalSizes[index] * flickerFactor;
 
-            // Обновляем цвет звезды
             this.colorsAttribute.array[index * 3] = this.originalColors[index * 3] * flickerFactor;     // R
             this.colorsAttribute.array[index * 3 + 1] = this.originalColors[index * 3 + 1] * flickerFactor; // G
             this.colorsAttribute.array[index * 3 + 2] = this.originalColors[index * 3 + 2] * flickerFactor; // B
         }
 
-        // Помечаем атрибуты как нуждающиеся в обновлении
         this.sizesAttribute.needsUpdate = true;
         this.colorsAttribute.needsUpdate = true;
     }

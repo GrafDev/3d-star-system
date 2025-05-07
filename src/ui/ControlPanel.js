@@ -39,7 +39,6 @@ export class ControlPanel {
         content.className = 'control-panel-content';
         this.container.appendChild(content);
 
-        // Добавляем слайдеры
         this.addSlider(
             content,
             'Скорость симуляции',
@@ -60,7 +59,6 @@ export class ControlPanel {
             (value) => this.updateStarSize(value)
         );
 
-        // Добавляем чекбоксы
         this.addCheckbox(
             content,
             'Показать орбиты',
@@ -68,7 +66,6 @@ export class ControlPanel {
             (checked) => this.toggleOrbits(checked)
         );
 
-        // Добавляем чекбокс для названий планет
         this.addCheckbox(
             content,
             'Показать названия планет',
@@ -76,7 +73,6 @@ export class ControlPanel {
             (checked) => this.toggleLabels(checked)
         );
 
-        // Добавляем CSS стили
         this.addStyles();
     }
 
@@ -139,12 +135,10 @@ export class ControlPanel {
         const isVisible = content.style.display !== 'none';
         content.style.display = isVisible ? 'none' : 'block';
 
-        // Меняем значок на кнопке
         const toggleButton = this.container.querySelector('.toggle-button');
         toggleButton.textContent = isVisible ? '+' : '−';
     }
 
-    // Методы для обновления параметров в SceneManager
     updateSimulationSpeed(value) {
         this.settings.simulationSpeed = value;
         this.sceneManager.setSimulationSpeed(value);
@@ -160,13 +154,11 @@ export class ControlPanel {
         this.sceneManager.setOrbitsVisibility(checked);
     }
 
-    // Метод для управления видимостью меток
     toggleLabels(checked) {
         this.settings.showLabels = checked;
         this.sceneManager.setLabelsVisibility(checked);
     }
 
-    // Добавление CSS стилей для панели управления
     addStyles() {
         const style = document.createElement('style');
         style.textContent = `
