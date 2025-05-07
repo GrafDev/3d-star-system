@@ -1,8 +1,5 @@
-// Конфигурация звездной системы в стиле Star Wars
 export const systemConfig = {
-    // Настройки для постобработки и эффектов
     postProcessing: {
-        // Настройки для эффекта Bloom
         bloom: {
             enabled: true,
             strength: 1.5,    // Интенсивность свечения
@@ -21,14 +18,12 @@ export const systemConfig = {
         emissiveColor: 0xffaa00,  // Цвет свечения
         emissiveIntensity: 1.2,    // Интенсивность свечения самого меша
         intensity: 10,
-        lightDistance: 5000,     // Дальность свечения звезды (увеличена для освещения астероидного пояса)
-        lightDecay: 0,             // Параметр угасания света (0 - свет не угасает с расстоянием)
+        lightDistance: 5000,
+        lightDecay: 0,
         textureUrl: '/textures/sun.png',
-        // Добавляем специальный флаг для включения свечения
-        bloom: true  // Флаг, что к этому объекту применяется эффект Bloom
+        bloom: true
     },
 
-    // Функция для создания планет со случайными начальными позициями
     generatePlanets: function() {
         // Базовая конфигурация планет Star Wars
         const planetConfigs = [
@@ -38,7 +33,7 @@ export const systemConfig = {
                 radius: 1.6,
                 distance: 12,
                 velocity: 1.8,
-                color: 0xd6c292, // песочный цвет
+                color: 0xd6c292,
                 textureUrl: '/textures/tatooine.png'
             },
             {
@@ -47,7 +42,7 @@ export const systemConfig = {
                 radius: 2.2,
                 distance: 18,
                 velocity: 1.6,
-                color: 0x4e7fbb, // городской/металлический цвет
+                color: 0x4e7fbb,
                 textureUrl: '/textures/coruscant.png'
             },
             {
@@ -56,7 +51,7 @@ export const systemConfig = {
                 radius: 1.9,
                 distance: 24,
                 velocity: 1.4,
-                color: 0x3d995e, // зеленый/синий цвет
+                color: 0x3d995e,
                 textureUrl: '/textures/naboo.png'
             },
             {
@@ -65,7 +60,7 @@ export const systemConfig = {
                 radius: 1.5,
                 distance: 30,
                 velocity: 1.2,
-                color: 0xeeeeff, // ледяной/снежный цвет
+                color: 0xeeeeff,
                 textureUrl: '/textures/hoth.png'
             },
             {
@@ -74,7 +69,7 @@ export const systemConfig = {
                 radius: 1.4,
                 distance: 36,
                 velocity: 1.1,
-                color: 0x4a633d, // болотный цвет
+                color: 0x4a633d,
                 textureUrl: '/textures/dagobah.png'
             },
             {
@@ -83,7 +78,7 @@ export const systemConfig = {
                 radius: 1.8,
                 distance: 44,
                 velocity: 0.9,
-                color: 0xc13e0e, // вулканический/красный цвет
+                color: 0xc13e0e,
                 textureUrl: '/textures/mustafar.png'
             },
             {
@@ -92,7 +87,7 @@ export const systemConfig = {
                 radius: 2.0,
                 distance: 52,
                 velocity: 0.8,
-                color: 0x2d7d46, // лесной цвет
+                color: 0x2d7d46,
                 textureUrl: '/textures/kashyyyk.png'
             },
             {
@@ -101,24 +96,19 @@ export const systemConfig = {
                 radius: 1.7,
                 distance: 60,
                 velocity: 0.7,
-                color: 0x1a3a59, // океанический/штормовой цвет
+                color: 0x1a3a59,
                 textureUrl: '/textures/kamino.png'
             }
         ];
 
-        // Создаем массив для хранения полной конфигурации планет
         const planets = [];
 
-        // Создаем планеты со случайными начальными позициями
         for (const config of planetConfigs) {
-            // Генерируем случайный угол от 0 до 360 градусов (0 до 2π в радианах)
             const randomAngle = Math.random() * Math.PI * 2;
 
-            // Вычисляем x и z координаты на основе расстояния и случайного угла
             const x = Math.cos(randomAngle) * config.distance;
             const z = Math.sin(randomAngle) * config.distance;
 
-            // Добавляем планету в массив с рассчитанными случайными координатами
             planets.push({
                 name: config.name,
                 mass: config.mass,
@@ -133,7 +123,6 @@ export const systemConfig = {
         return planets;
     },
 
-    // Динамический параметр планет, будет создаваться при каждой загрузке
     get planets() {
         return this.generatePlanets();
     },
@@ -150,7 +139,7 @@ export const systemConfig = {
 
     // Параметры звездного неба
     starBackground: {
-        // Базовые настройки
+
         starsCount: 5000,                // Количество звезд
         radius: 4000,                     // Радиус сферы со звездами
         minSize: 0.1,                     // Минимальный размер звезды

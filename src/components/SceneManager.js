@@ -100,22 +100,18 @@ export class SceneManager {
     createStarBackground() {
         console.log("SceneManager.createStarBackground: Начало создания звездного фона...");
 
-        // Используем параметры из конфигурации или значения по умолчанию
         const starBackgroundConfig = systemConfig.starBackground || {
-            starsCount: 25000,  // Увеличил количество звезд
-            radius: 2500,       // Увеличил радиус
-            minSize: 1.0,       // Увеличил минимальный размер
-            maxSize: 4.0,       // Увеличил максимальный размер
+            starsCount: 25000,
+            radius: 2500,
+            minSize: 1.0,
+            maxSize: 4.0,
             flickeringStarsPercent: 0.2,
             flickeringSpeed: 0.3
         };
 
-        console.log("SceneManager.createStarBackground: Использую конфигурацию:", starBackgroundConfig);
 
-        // Создаем звездное небо с использованием системы частиц
         const starBackground = new StarBackground(starBackgroundConfig);
 
-        // Проверка, что объект points создан
         if (!starBackground.points) {
             console.error("SceneManager.createStarBackground: starBackground.points не создан!");
             return;
@@ -124,11 +120,9 @@ export class SceneManager {
         console.log("SceneManager.createStarBackground: Добавление на сцену, points =", starBackground.points);
         this.scene.add(starBackground.points);
 
-        // Проверяем, что звезды действительно добавлены на сцену
         const objectAdded = this.scene.children.includes(starBackground.points);
         console.log(`SceneManager.createStarBackground: Звезды ${objectAdded ? 'успешно добавлены' : 'НЕ добавлены'} на сцену`);
 
-        // Выводим структуру сцены после добавления
         console.log("SceneManager.createStarBackground: Текущая структура сцены:",
             this.scene.children.map(child => ({
                 type: child.type,
@@ -143,24 +137,20 @@ export class SceneManager {
     }
 
     createCelestialObjects() {
-        // Создание центральной звезды
         const star = new Star(systemConfig.star);
         this.scene.add(star.mesh);
         this.celestialObjects.push(star);
 
-        // Создание планет
         systemConfig.planets.forEach(planetConfig => {
             const planet = new Planet(planetConfig);
             this.scene.add(planet.mesh);
             this.celestialObjects.push(planet);
 
-            // Добавляем орбиту планеты в сцену
             if (planet.orbitMesh) {
                 this.scene.add(planet.orbitMesh);
             }
         });
 
-        // Создание астероидного пояса
         const asteroidBelt = new AsteroidBelt(systemConfig.asteroidBelt);
         this.scene.add(asteroidBelt.group);
         this.celestialObjects.push(asteroidBelt);
@@ -169,16 +159,13 @@ export class SceneManager {
     }
 
     createCircularText() {
-        // Радиус для текста (немного больше радиуса звезды)
         const textRadius = systemConfig.star.radius * 1.3;
 
-        // Создаем 3D-текст по окружности
         this.circularText = new CircularText3D(" * Created by Gregory Iakovlev", textRadius, this.scene);
 
         console.log("SceneManager: Добавлена 3D-надпись вокруг звезды");
     }
 
-    // Установка скорости симуляции
     setSimulationSpeed(speed) {
         this.simulationSpeed = speed;
         console.log(`SceneManager: Скорость симуляции установлена на ${speed}`);
