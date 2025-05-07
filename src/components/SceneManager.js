@@ -4,9 +4,9 @@ import { systemConfig } from '../config/systemConfig';
 import { Star } from '../objects/Star';
 import { Planet } from '../objects/Planet';
 import { AsteroidBelt } from '../objects/AsteroidBelt';
-// Удаляем импорт класса Comet
-// import { Comet } from '../objects/Comet';
 import { StarBackground } from '../effects/StarBackground';
+import { CSS2DRenderer } from 'three/examples/jsm/renderers/CSS2DRenderer';
+import { CircularText3D } from '../effects/CircularText3D';
 
 export class SceneManager {
     constructor(container) {
@@ -22,11 +22,25 @@ export class SceneManager {
             10000 // дальняя плоскость отсечения
         );
 
+        // Добавляем значение по умолчанию для скорости симуляции
+        this.simulationSpeed = 1.0;
+
         // Настройка рендерера
         this.renderer.setSize(window.innerWidth, window.innerHeight);
         this.renderer.setPixelRatio(window.devicePixelRatio);
         this.renderer.shadowMap.enabled = true;
         this.container.appendChild(this.renderer.domElement);
+
+        // Инициализация CSS2DRenderer для меток
+        this.labelRenderer = new CSS2DRenderer();
+        this.labelRenderer.setSize(window.innerWidth, window.innerHeight);
+        this.labelRenderer.domElement.style.position = 'absolute';
+        this.labelRenderer.domElement.style.top = '0';
+        this.labelRenderer.domElement.style.pointerEvents = 'none';
+        this.container.appendChild(this.labelRenderer.domElement);
+
+        // Добавляем метки по умолчанию видимыми
+        this.labelsVisible = true;
 
         // Контроллер камеры
         this.cameraController = new CameraController(this.camera, this.renderer.domElement);
@@ -34,6 +48,7 @@ export class SceneManager {
         // Массивы для хранения объектов сцены
         this.celestialObjects = [];
         this.starBackground = null;
+        this.circularText = null;
 
         // Инициализация сцены
         this.initialize();
@@ -74,6 +89,9 @@ export class SceneManager {
         // Создание космических объектов
         console.log("SceneManager: Создание космических объектов...");
         this.createCelestialObjects();
+
+        // Добавляем кольцевую надпись вокруг звезды
+        this.createCircularText();
 
         console.log("SceneManager: Инициализация завершена.");
         console.log("SceneManager: Дерево сцены:", this.scene);
@@ -147,14 +165,82 @@ export class SceneManager {
         this.scene.add(asteroidBelt.group);
         this.celestialObjects.push(asteroidBelt);
 
-        // Кометы удалены
-
         console.log("SceneManager.createCelestialObjects: Создано объектов:", this.celestialObjects.length);
     }
 
+    createCircularText() {
+        // Радиус для текста (немного больше радиуса звезды)
+        const textRadius = systemConfig.star.radius * 1.3;
+
+        // Создаем 3D-текст по окружности
+        this.circularText = new CircularText3D(" * Created by Gregory Iakovlev", textRadius, this.scene);
+
+        console.log("SceneManager: Добавлена 3D-надпись вокруг звезды");
+    }
+
+    // Установка скорости симуляции
+    setSimulationSpeed(speed) {
+        this.simulationSpeed = speed;
+        console.log(`SceneManager: Скорость симуляции установлена на ${speed}`);
+    }
+
+    // Установка размера звезды
+    setStarSize(size) {
+        // Находим звезду среди космических объектов
+        const star = this.celestialObjects.find(obj => obj instanceof Star);
+        if (star) {
+            const originalRadius = systemConfig.star.radius;
+            const newRadius = originalRadius * size;
+
+            // Обновляем геометрию звезды
+            star.mesh.geometry.dispose(); // Освобождаем старую геометрию
+            star.geometry = new THREE.SphereGeometry(newRadius, 32, 32);
+            star.mesh.geometry = star.geometry;
+            star.radius = newRadius;
+
+            // Обновляем радиус текста вокруг звезды
+            if (this.circularText) {
+                this.circularText.updateRadius(newRadius * 1.3);
+            }
+
+            console.log(`SceneManager: Размер звезды установлен на ${size} (радиус: ${newRadius})`);
+        }
+    }
+
+    // Установка видимости орбит
+    setOrbitsVisibility(visible) {
+        // Находим планеты и делаем их орбиты видимыми или невидимыми
+        this.celestialObjects.forEach(object => {
+            if (object instanceof Planet && object.orbitMesh) {
+                object.orbitMesh.visible = visible;
+            }
+        });
+
+        console.log(`SceneManager: Видимость орбит установлена на ${visible ? 'видимо' : 'невидимо'}`);
+    }
+
+    // Установка видимости меток планет
+    setLabelsVisibility(visible) {
+        this.labelsVisible = visible;
+
+        // Обновляем видимость для всех планет
+        this.celestialObjects.forEach(object => {
+            if (object instanceof Planet) {
+                object.setLabelVisibility(visible);
+            }
+        });
+
+        // Обновляем видимость кольцевой надписи
+        if (this.circularText) {
+            this.circularText.setVisible(visible);
+        }
+
+        console.log(`SceneManager: Видимость названий планет установлена на ${visible ? 'видимо' : 'невидимо'}`);
+    }
+
     update() {
-        // Обновление состояния всех объектов
-        const deltaTime = 0.01; // В будущем можно использовать реальный deltaTime
+        // Учитываем скорость симуляции при расчете deltaTime
+        const deltaTime = 0.01 * (this.simulationSpeed || 1.0);
 
         // Обновление звездного неба для анимации мерцания (обновляем первым)
         if (this.starBackground) {
@@ -163,7 +249,7 @@ export class SceneManager {
             console.warn("SceneManager.update: starBackground не инициализирован");
         }
 
-        // Обновление космических объектов
+        // Обновление космических объектов с учетом скорости симуляции
         this.celestialObjects.forEach(object => {
             object.update(deltaTime, this.celestialObjects);
         });
@@ -188,6 +274,7 @@ export class SceneManager {
 
         this.update();
         this.renderer.render(this.scene, this.camera);
+        this.labelRenderer.render(this.scene, this.camera);
     }
 
     onWindowResize() {
@@ -195,5 +282,6 @@ export class SceneManager {
         this.camera.aspect = window.innerWidth / window.innerHeight;
         this.camera.updateProjectionMatrix();
         this.renderer.setSize(window.innerWidth, window.innerHeight);
+        this.labelRenderer.setSize(window.innerWidth, window.innerHeight);
     }
 }

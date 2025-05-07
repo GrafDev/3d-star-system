@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { CelestialObject } from './CelestialObject';
+import { PlanetLabel } from '../effects/PlanetLabel';
 
 export class Planet extends CelestialObject {
     constructor(config) {
@@ -61,6 +62,10 @@ export class Planet extends CelestialObject {
         });
         this.orbitMesh = new THREE.Mesh(orbitGeometry, orbitMaterial);
         this.orbitMesh.rotation.x = Math.PI / 2; // Размещаем в горизонтальной плоскости
+
+        // Добавляем метку с названием планеты
+        this.label = new PlanetLabel(this.name, 1.0);
+        this.mesh.add(this.label.labelObject);
     }
 
     update(deltaTime, celestialObjects) {
@@ -80,5 +85,12 @@ export class Planet extends CelestialObject {
 
         // Добавляем вращение планеты вокруг своей оси
         this.mesh.rotation.y += 0.005; // Можно настроить скорость вращения
+    }
+
+    // Метод для управления видимостью метки
+    setLabelVisibility(visible) {
+        if (this.label) {
+            this.label.setVisible(visible);
+        }
     }
 }

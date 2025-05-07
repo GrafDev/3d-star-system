@@ -155,11 +155,11 @@ export const systemConfig = {
         radius: 4000,                     // Радиус сферы со звездами
         minSize: 0.1,                     // Минимальный размер звезды
         maxSize: 10.0,                     // Максимальный размер звезды
-        baseMaterialSize: 8.0,            // Базовый размер материала для точек
+        baseMaterialSize: 12.0,            // Базовый размер материала для точек
         renderOrder: 100,                 // Приоритет рендеринга
 
         // Настройки мерцания
-        flickeringStarsPercent: 0.1,      // Процент мерцающих звезд
+        flickeringStarsPercent: 0.8,      // Процент мерцающих звезд
         flickeringSpeed: 0.1,             // Скорость мерцания
         flickerMinFactor: 0.1,            // Минимальный фактор мерцания
         flickerMaxFactor: 1.0,            // Максимальный фактор мерцания

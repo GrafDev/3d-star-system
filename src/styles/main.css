@@ -95,6 +95,14 @@ button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
+.planet-label {
+  color: white;
+  font-family: Arial, sans-serif;
+  font-weight: bold;
+  pointer-events: none;
+  white-space: nowrap;
+
+}
 
 /* Стили для светлой темы (если используется) */
 @media (prefers-color-scheme: light) {
